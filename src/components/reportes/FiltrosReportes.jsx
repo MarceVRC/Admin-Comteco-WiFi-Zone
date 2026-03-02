@@ -2,7 +2,11 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/mat
 
 export default function FiltrosReportes({ mes, setMes, zona, setZona }) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginBottom: 3 }}>
+    <Box sx={{ 
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 2,
+        marginBottom: 3 }}>
       <FormControl size="small">
         <InputLabel>Mes</InputLabel>
         <Select value={mes} label="Mes" onChange={(e) => setMes(e.target.value)}>
