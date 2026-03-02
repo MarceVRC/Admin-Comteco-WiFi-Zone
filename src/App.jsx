@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
-import Estadisticas from "./pages/Estadisticas";
-import Zonas from "./pages/Zonas";
-import Reportes from "./pages/Reportes";
+import Estadisticas from "./pages/Estadisticas.jsx";
+import Zonas from "./pages/Zonas.jsx";
+import Reportes from "./pages/Reportes.jsx";
 import Box from "@mui/material/Box";
 
 function App() {
