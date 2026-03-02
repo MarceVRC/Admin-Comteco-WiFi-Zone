@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import FiltrosReportes from "../components/reportes/FiltrosReportes";
 import TablaReportes from "../components/reportes/TablaReportes";
+import Layout from "../components/Layout";
 
 export default function Reportes() {
   const [mes, setMes] = useState("02-2026");
@@ -16,20 +17,17 @@ export default function Reportes() {
   ];
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        width: "100%",
-        backgroundColor: "#f5f5f5",
-        p: { xs: 2, sm: 3, md: 4 },
-      }}
-    >
+    <Layout>
       <Paper
         elevation={3}
         sx={{
           width: "100%",
+          maxWidth: 1200,
+          mx: "auto",
           p: { xs: 2, sm: 3, md: 4 },
           borderRadius: 3,
+          backgroundColor: "white",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         }}
       >
         <Typography
@@ -37,6 +35,7 @@ export default function Reportes() {
           sx={{
             mb: 2,
             fontWeight: "bold",
+            color: "#b71c1c",
           }}
         >
           Últimos reportes
@@ -45,6 +44,6 @@ export default function Reportes() {
         <FiltrosReportes mes={mes} setMes={setMes} zona={zona} setZona={setZona} />
         <TablaReportes reportes={reportes} />
       </Paper>
-    </Box>
+    </Layout>
   );
 }

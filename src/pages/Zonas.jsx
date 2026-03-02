@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { Box, Paper, Typography, TextField, Button, Grid } from "@mui/material";
+import Layout from "../components/Layout";
 import "leaflet/dist/leaflet.css";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
@@ -72,39 +73,45 @@ export default function Zonas() {
   };
 
   return (
-    <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 3 }}>
-      {/* MAPA */}
-      <MapContainer
-        center={[-17.3925, -66.1565]}
-        zoom={17}
-        style={{ width: "100%", height: "400px", borderRadius: 3 }}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <MapHandler />
-        {zonas.map((zona) => (
-          <Marker
-            key={zona.id}
-            position={zona.position}
-            eventHandlers={{ click: () => setSelectedZona(zona) }}
+    <Layout>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        {/* MAPA */}
+        <Paper
+          elevation={3}
+          sx={{ borderRadius: 3, overflow: "hidden", mb: 2 }}
+        >
+          <MapContainer
+            center={[-17.3925, -66.1565]}
+            zoom={17}
+            style={{ width: "100%", height: "300px", minHeight: "300px" }}
           >
-            <Popup>{zona.nombre}</Popup>
-          </Marker>
-        ))}
-        {/* Cursor dinámico */}
-        {hoverPos && <Marker position={hoverPos} opacity={0.5}></Marker>}
-      </MapContainer>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <MapHandler />
+            {zonas.map((zona) => (
+              <Marker
+                key={zona.id}
+                position={zona.position}
+                eventHandlers={{ click: () => setSelectedZona(zona) }}
+              >
+                <Popup>{zona.nombre}</Popup>
+              </Marker>
+            ))}
+            {/* Cursor dinámico */}
+            {hoverPos && <Marker position={hoverPos} opacity={0.5}></Marker>}
+          </MapContainer>
+        </Paper>
 
-      {/* CONTENEDOR DE EDICIÓN*/}
-      <Paper
-        elevation={3}
-        sx={{
-          padding: { xs: 2, sm: 3 },
-          borderRadius: 3,
-          backgroundColor: "white",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-          maxWidth: 600,
-        }}
-      >
+        {/* CONTENEDOR DE EDICIÓN*/}
+        <Paper
+          elevation={3}
+          sx={{
+            padding: { xs: 2, sm: 3 },
+            borderRadius: 3,
+            backgroundColor: "white",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            maxWidth: 600,
+          }}
+        >
         {selectedZona ? (
           <>
             <Typography
@@ -160,6 +167,7 @@ export default function Zonas() {
           </Typography>
         )}
       </Paper>
-    </Box>
+      </Box>
+    </Layout>
   );
 }

@@ -1,27 +1,38 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Header from "./components/Header";
-import Estadisticas from "./pages/Estadisticas";
-import Zonas from "./pages/Zonas";
-import Reportes from "./pages/Reportes";
+import routes from "./routes";
 
 function App() {
   return (
     <Router>
-      <Box sx={{ minHeight: "100vh", width: "100%" }}>
+      {/* Contenedor principal */}
+      <Box sx={{ minHeight: "100vh", width: "100%", display: "flex", flexDirection: "column" }}>
         
         <Header />
+
         <Box
           sx={{
+            flexGrow: 1,
             width: "100%",
-            marginTop: "90px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+            /* center content and limit max width for better readability */
+            maxWidth: 1200,
+            mx: "auto",
+            px: 2,
           }}
         >
           <Routes>
             <Route path="/" element={<Navigate to="/estadisticas" replace />} />
-            <Route path="/estadisticas" element={<Estadisticas />} />
-            <Route path="/zonas" element={<Zonas />} />
-            <Route path="/reportes" element={<Reportes />} />
+            {routes.map((r) => (
+              <Route
+                key={r.path}
+                path={r.path}
+                element={<r.component />}
+              />
+            ))}
           </Routes>
         </Box>
 

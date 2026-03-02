@@ -3,8 +3,8 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import Button from "@mui/material/Button";
+import { NavLink } from "react-router-dom";
 import comLogoWhite from '../assets/c-white.png'
 
 export default function Header() {
@@ -39,15 +39,44 @@ export default function Header() {
           </Box>
         </Box>
 
-        <IconButton
-          size="large"
-          edge="end"
-          color="inherit"
-          aria-label="menu"
-          sx={{ ml: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Button
+            component={NavLink}
+            to="/estadisticas"
+            color="inherit"
+            size="small"
+            sx={{
+              textTransform: "none",
+              "&.active": { borderBottom: "2px solid #fff" },
+            }}
+          >
+            Estadísticas
+          </Button>
+          <Button
+            component={NavLink}
+            to="/zonas"
+            color="inherit"
+            size="small"
+            sx={{
+              textTransform: "none",
+              "&.active": { borderBottom: "2px solid #fff" },
+            }}
+          >
+            Zonas
+          </Button>
+          <Button
+            component={NavLink}
+            to="/reportes"
+            color="inherit"
+            size="small"
+            sx={{
+              textTransform: "none",
+              "&.active": { borderBottom: "2px solid #fff" },
+            }}
+          >
+            Reportes
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );
