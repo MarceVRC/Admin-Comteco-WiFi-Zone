@@ -3,11 +3,10 @@ import { Box, Paper, Typography, LinearProgress, Grid } from "@mui/material";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Layout from "../components/Layout";
 
-// Datos mock
 const stats = {
   reportesMes: 48,
   maxPermisible: 100,
-  calidadServicio: "Moderado", // puede ser "Bueno", "Moderado", "Malo", "Pesimo"
+  calidadServicio: "Moderado",
   rendimientoMes: 41.52,
   rendimientoTexto: "MALO",
   tabla: [
@@ -21,7 +20,6 @@ const stats = {
   ],
 };
 
-// Función para color según calidad del servicio
 const colorCalidad = (calidad) => {
   switch (calidad.toLowerCase()) {
     case "bueno":

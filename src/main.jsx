@@ -6,7 +6,7 @@ import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
 const theme = createTheme({
   palette: {
-    mode: "light", // <--- fuerza tema claro
+    mode: "light",
     background: {
       default: "#f5f5f5",
     },
