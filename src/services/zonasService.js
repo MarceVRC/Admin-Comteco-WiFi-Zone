@@ -38,3 +38,21 @@ export const crearZona = async (apiUrl, payload) => {
   if (!res.ok) throw new Error(res.statusText || res.status);
   return res.json();
 };
+
+export const actualizarZona = async (apiUrl, id, payload) => {
+  const res = await fetch(`${apiUrl}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(res.statusText || res.status);
+  return res.json();
+};
+
+export const eliminarZona = async (apiUrl, id) => {
+  const res = await fetch(`${apiUrl}/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error(res.statusText || res.status);
+  return res.json();
+};

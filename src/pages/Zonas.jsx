@@ -7,7 +7,7 @@ import "./Zonas.css";
 import MapaZonas from "../components/MapaZonas";
 import FormularioZona from "../components/FormularioZona";
 
-import { obtenerZonas, crearZona } from "../services/zonasService";
+import { obtenerZonas, crearZona, actualizarZona, eliminarZona } from "../services/zonasService";
 
 import L from "leaflet";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -72,7 +72,11 @@ export default function Zonas() {
     };
 
     try {
-      await crearZona(API_URL, cuerpo);
+      if (zonaSeleccionada.id) {
+        await actualizarZona(API_URL, zonaSeleccionada.id, cuerpo);
+      } else {
+        await crearZona(API_URL, cuerpo);
+      }
       await cargarZonas();
     } catch (err) {
       setError(err.message);
@@ -82,19 +86,33 @@ export default function Zonas() {
     setHoverPos(null);
   };
 
-  const eliminarZonaLocal = () => {
+  const eliminarZonaLocal = async () => {
     if (!zonaSeleccionada) return;
-    setZonas((prev) => prev.filter((z) => z.id !== zonaSeleccionada.id));
+    try {
+      if (zonaSeleccionada.id) {
+        await eliminarZona(API_URL, zonaSeleccionada.id);
+        await cargarZonas();
+      }
+    } catch (err) {
+      setError(err.message);
+    }
     setZonaSeleccionada(null);
   };
 
-  const alternarMantenimiento = () => {
+  const alternarMantenimiento = async () => {
     if (!zonaSeleccionada) return;
     const nuevo = zonaSeleccionada.estado === 'MANTENIMIENTO' ? 'ACTIVA' : 'MANTENIMIENTO';
     setZonaSeleccionada((prev) => ({ ...prev, estado: nuevo }));
     setZonas((prev) =>
       prev.map((z) => (z.id === zonaSeleccionada.id ? { ...z, estado: nuevo } : z))
     );
+    try {
+      if (zonaSeleccionada.id) {
+        await actualizarZona(API_URL, zonaSeleccionada.id, { estado: nuevo });
+      }
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
 
