@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import FiltrosReportes from "../components/reportes/FiltrosReportes";
 import TablaReportes from "../components/reportes/TablaReportes";
-import Layout from "../components/Layout";
+import Layout from "../components/common/Layout";
 
 export default function Reportes() {
   const [mes, setMes] = useState("02-2026");

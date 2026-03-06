@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
-import Header from "./components/Header";
+import Header from "./components/common/Header";
 import routes from "./routes";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <Router>
       {/* Contenedor principal */}
       <Box sx={{ minHeight: "100vh", width: "100%", display: "flex", flexDirection: "column" }}>
-        
+
         <Header />
 
         <Box

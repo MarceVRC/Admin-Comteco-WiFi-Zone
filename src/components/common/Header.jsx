@@ -5,8 +5,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
-import comLogoWhite from '../assets/c-white.png'
+import comLogoWhite from '../../assets/c-white.png';
 
+/**
+ * Componente de cabecera con navegación.
+ */
 export default function Header() {
   return (
     <AppBar

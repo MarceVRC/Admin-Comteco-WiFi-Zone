@@ -1,26 +1,37 @@
 import React from "react";
 import { Grid, TextField, Button, Typography } from "@mui/material";
 
-export default function FormularioZona({ zona, onChange, onSave, onDelete, onToggleMantenimiento }) {
+/**
+ * Formulario para crear o editar una zona de WiFi.
+ */
+export default function FormularioZona({
+  zona,
+  onChange,
+  onSave,
+  onDelete,
+  onToggleMantenimiento
+}) {
   if (!zona) {
-    return <Typography>Haz click en el mapa para agregar o seleccionar una zona.</Typography>;
+    return <Typography>Haz clic en el mapa para agregar o seleccionar una zona.</Typography>;
   }
 
   return (
     <>
-      <Typography variant="h6" className="zona-header">
+      <Typography variant="h6" className="zona-header" sx={{ mb: 2, fontWeight: 'bold' }}>
         {zona.id ? "Editar Zona" : "Nueva Zona"}
       </Typography>
+
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
             className="zona-input"
             fullWidth
-            label="Nombre"
+            label="Nombre de la Zona"
             value={zona.nombre}
             onChange={(e) => onChange("nombre", e.target.value)}
           />
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             className="zona-input"
@@ -30,44 +41,50 @@ export default function FormularioZona({ zona, onChange, onSave, onDelete, onTog
             onChange={(e) => onChange("direccion", e.target.value)}
           />
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             className="zona-input"
             fullWidth
-            label="Capacidad"
+            label="Capacidad (Dispositivos)"
             type="number"
             value={zona.capacidad || ''}
             onChange={(e) => onChange("capacidad", e.target.value)}
           />
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             className="zona-input"
             fullWidth
-            label="Rango"
+            label="Rango de Cobertura (Metros)"
             type="number"
             value={zona.rango || ''}
             onChange={(e) => onChange("rango", e.target.value)}
           />
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             className="zona-input"
             fullWidth
-            label="URL de foto / icono del marcador"
+            label="URL de la Foto / Icono"
             value={zona.foto || ''}
             onChange={(e) => onChange("foto", e.target.value)}
           />
         </Grid>
-        <Grid item xs={12} className="zona-btns">
-          <Button variant="contained" color="primary" onClick={onSave}>
+
+        <Grid item xs={12} className="zona-btns" sx={{ display: 'flex', gap: 1, mt: 2 }}>
+          <Button variant="contained" color="primary" onClick={onSave} sx={{ flex: 1 }}>
             Guardar
           </Button>
+
           {zona.id && (
             <Button variant="outlined" color="error" onClick={onDelete}>
               Eliminar
             </Button>
           )}
+
           {zona.id && (
             <Button
               variant="contained"
@@ -82,11 +99,3 @@ export default function FormularioZona({ zona, onChange, onSave, onDelete, onTog
     </>
   );
 }
-
-const inputStyle = {
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': { borderColor: 'red' },
-    '&:hover fieldset': { borderColor: 'darkred' },
-    '&.Mui-focused fieldset': { borderColor: 'red' },
-  },
-};

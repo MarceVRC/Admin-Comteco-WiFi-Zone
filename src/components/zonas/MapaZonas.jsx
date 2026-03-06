@@ -2,23 +2,32 @@ import React from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle } from "react-leaflet";
 import L from "leaflet";
 
-import cRed from "../assets/c-red.png";
+import cRed from "../../assets/c-red.png";
 
+/**
+ * Crea un icono personalizado para el marcador del mapa.
+ */
 const crearIcono = (url, zona) => {
   const opciones = {
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
   };
+
   if (zona && zona.estado === 'MANTENIMIENTO') {
     opciones.className = 'grayscale-icon';
   }
+
   if (url) {
     return new L.Icon({ iconUrl: url, ...opciones });
   }
+
   return new L.Icon({ iconUrl: cRed, ...opciones });
 };
 
+/**
+ * Componente interno para manejar eventos del mapa.
+ */
 const EventosMapa = ({ setZonaSeleccionada, setHoverPos }) => {
   useMapEvents({
     mousemove(e) {
@@ -41,7 +50,17 @@ const EventosMapa = ({ setZonaSeleccionada, setHoverPos }) => {
   return null;
 };
 
-export default function MapaZonas({ className, zonas, zonaSeleccionada, setZonaSeleccionada, hoverPos, setHoverPos }) {
+/**
+ * Componente principal del Mapa de Zonas.
+ */
+export default function MapaZonas({
+  className,
+  zonas,
+  zonaSeleccionada,
+  setZonaSeleccionada,
+  hoverPos,
+  setHoverPos
+}) {
   return (
     <MapContainer
       className={className}
@@ -51,7 +70,9 @@ export default function MapaZonas({ className, zonas, zonaSeleccionada, setZonaS
       attributionControl={false}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
       <EventosMapa setZonaSeleccionada={setZonaSeleccionada} setHoverPos={setHoverPos} />
+
       {zonas
         .filter((z) => (z.estado || '').toUpperCase() !== 'DESHABILITADA')
         .map((z) => (
@@ -63,6 +84,7 @@ export default function MapaZonas({ className, zonas, zonaSeleccionada, setZonaS
             >
               <Popup>{z.nombre}</Popup>
             </Marker>
+
             {z.rango != null && (
               <Circle
                 center={z.position}
@@ -75,6 +97,7 @@ export default function MapaZonas({ className, zonas, zonaSeleccionada, setZonaS
             )}
           </React.Fragment>
         ))}
+
       {zonaSeleccionada && zonaSeleccionada.position && (
         <Marker
           position={zonaSeleccionada.position}
@@ -93,6 +116,7 @@ export default function MapaZonas({ className, zonas, zonaSeleccionada, setZonaS
           }}
         />
       )}
+
       {hoverPos && <Marker position={hoverPos} opacity={0.5} />}
     </MapContainer>
   );
