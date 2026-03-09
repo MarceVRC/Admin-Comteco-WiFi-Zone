@@ -18,10 +18,7 @@ const crearIcono = (url, zona) => {
     opciones.className = 'grayscale-icon';
   }
 
-  if (url) {
-    return new L.Icon({ iconUrl: url, ...opciones });
-  }
-
+  // Siempre retornamos el icono default cRed ignorando la url del backend
   return new L.Icon({ iconUrl: cRed, ...opciones });
 };
 

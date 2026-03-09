@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import * as zonasApi from "../api/zonasApi";
+import * as cloudinaryApi from "../api/cloudinaryService";
 
 /**
  * Hook personalizado para gestionar la lógica de las zonas de WiFi.
@@ -35,33 +36,45 @@ export const useZonas = () => {
     const guardarZona = async () => {
         if (!zonaSeleccionada || !zonaSeleccionada.nombre) return;
 
-        const latVal = zonaSeleccionada.lat || (zonaSeleccionada.position && zonaSeleccionada.position[0]);
-        const lngVal = zonaSeleccionada.lng || (zonaSeleccionada.position && zonaSeleccionada.position[1]);
-
-        const latNum = Number(latVal);
-        const lngNum = Number(lngVal);
-
-        const cuerpo = {
-            nombre: zonaSeleccionada.nombre,
-            direccion: zonaSeleccionada.direccion || "",
-            capacidad: Number(zonaSeleccionada.capacidad || 0),
-            rango: Number(zonaSeleccionada.rango || 0),
-            lat: isNaN(latNum) ? 0 : latNum,
-            lng: isNaN(lngNum) ? 0 : lngNum,
-            velocidad: Number(zonaSeleccionada.velocidad || 0),
-        };
-
-        if (zonaSeleccionada.estado) {
-            cuerpo.estado = zonaSeleccionada.estado;
-        }
-
-        if (zonaSeleccionada.foto && typeof zonaSeleccionada.foto === 'string' && zonaSeleccionada.foto.trim() !== "") {
-            cuerpo.foto = zonaSeleccionada.foto;
-        }
-
-        console.log('Enviando datos de zona:', cuerpo);
+        setCargando(true);
+        setError(null);
 
         try {
+            let fotoUrl = zonaSeleccionada.foto;
+
+            // Si hay un archivo pendiente de subir
+            if (zonaSeleccionada.archivoFoto) {
+                console.log('Subiendo imagen a Cloudinary...');
+                fotoUrl = await cloudinaryApi.subirImagenACloudinary(zonaSeleccionada.archivoFoto);
+                console.log('Imagen subida con éxito:', fotoUrl);
+            }
+
+            const latVal = zonaSeleccionada.lat || (zonaSeleccionada.position && zonaSeleccionada.position[0]);
+            const lngVal = zonaSeleccionada.lng || (zonaSeleccionada.position && zonaSeleccionada.position[1]);
+
+            const latNum = Number(latVal);
+            const lngNum = Number(lngVal);
+
+            const cuerpo = {
+                nombre: zonaSeleccionada.nombre,
+                direccion: zonaSeleccionada.direccion || "",
+                capacidad: Number(zonaSeleccionada.capacidad || 0),
+                rango: Number(zonaSeleccionada.rango || 0),
+                lat: isNaN(latNum) ? 0 : latNum,
+                lng: isNaN(lngNum) ? 0 : lngNum,
+                velocidad: Number(zonaSeleccionada.velocidad || 0),
+            };
+
+            if (zonaSeleccionada.estado) {
+                cuerpo.estado = zonaSeleccionada.estado;
+            }
+
+            if (fotoUrl && typeof fotoUrl === 'string' && fotoUrl.trim() !== "") {
+                cuerpo.foto = fotoUrl;
+            }
+
+            console.log('Enviando datos de zona:', cuerpo);
+
             if (zonaSeleccionada.id) {
                 const res = await zonasApi.actualizarZona(zonaSeleccionada.id, cuerpo);
                 console.log('Respuesta actualizar:', res);
@@ -73,7 +86,10 @@ export const useZonas = () => {
             setZonaSeleccionada(null);
             setHoverPos(null);
         } catch (err) {
+            console.error('Error detallado al guardar:', err);
             setError(err.message);
+        } finally {
+            setCargando(false);
         }
     };
 

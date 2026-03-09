@@ -35,15 +35,20 @@
 }
 
 .zona-input .MuiOutlinedInput-root fieldset {
-  border-color: red;
+  border-color: #CC0000;
+  border-width: 1.5px;
 }
 
 .zona-input .MuiOutlinedInput-root:hover fieldset {
-  border-color: darkred;
+  border-color: #990000;
 }
 
 .zona-input .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: red;
+  border-color: #CC0000;
+}
+
+.zona-input .MuiInputLabel-root.Mui-focused {
+  color: #CC0000;
 }
 
 .zona-btns {
@@ -59,8 +64,13 @@
 }
 
 .zona-header {
-  font-weight: bold;
-  margin-bottom: 16px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: #CC0000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-left: 5px solid #CC0000;
+  padding-left: 15px;
 }
 
 /* estilo para marcador rojo pequeño */
