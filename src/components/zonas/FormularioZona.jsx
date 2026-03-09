@@ -48,7 +48,7 @@ export default function FormularioZona({
             fullWidth
             label="Capacidad (Dispositivos)"
             type="number"
-            value={zona.capacidad || ''}
+            value={zona.capacidad || 0}
             onChange={(e) => onChange("capacidad", e.target.value)}
           />
         </Grid>
@@ -59,7 +59,7 @@ export default function FormularioZona({
             fullWidth
             label="Rango de Cobertura (Metros)"
             type="number"
-            value={zona.rango || ''}
+            value={zona.rango || 0}
             onChange={(e) => onChange("rango", e.target.value)}
           />
         </Grid>
@@ -71,6 +71,17 @@ export default function FormularioZona({
             label="URL de la Foto / Icono"
             value={zona.foto || ''}
             onChange={(e) => onChange("foto", e.target.value)}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            className="zona-input"
+            fullWidth
+            label="Velocidad (Mbps)"
+            type="number"
+            value={zona.velocidad || 0}
+            onChange={(e) => onChange("velocidad", e.target.value)}
           />
         </Grid>
 

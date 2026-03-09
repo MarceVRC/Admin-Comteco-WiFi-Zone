@@ -52,12 +52,17 @@ export const obtenerZonas = async () => {
  * @returns {Object} - Respuesta del servidor.
  */
 export const crearZona = async (datosZona) => {
+    console.log(`POST a ${env.API_BASE_URL} con:`, datosZona);
     const respuesta = await fetch(env.API_BASE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosZona),
     });
-    if (!respuesta.ok) throw new Error(`Al crear zona: ${respuesta.status}`);
+    if (!respuesta.ok) {
+        const errorData = await respuesta.json();
+        console.error('Error del servidor:', errorData);
+        throw new Error(errorData.error || `Al crear zona: ${respuesta.status}`);
+    }
     return respuesta.json();
 };
 
@@ -68,12 +73,17 @@ export const crearZona = async (datosZona) => {
  * @returns {Object} - Respuesta del servidor.
  */
 export const actualizarZona = async (id, datosZona) => {
+    console.log(`PUT a ${env.API_BASE_URL}/${id} con:`, datosZona);
     const respuesta = await fetch(`${env.API_BASE_URL}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosZona),
     });
-    if (!respuesta.ok) throw new Error(`Error al actualizar zona: ${respuesta.status}`);
+    if (!respuesta.ok) {
+        const errorData = await respuesta.json();
+        console.error('Error del servidor:', errorData);
+        throw new Error(errorData.error || `Error al actualizar zona: ${respuesta.status}`);
+    }
     return respuesta.json();
 };
 

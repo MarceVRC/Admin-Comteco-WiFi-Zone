@@ -38,24 +38,36 @@ export const useZonas = () => {
         const latVal = zonaSeleccionada.lat || (zonaSeleccionada.position && zonaSeleccionada.position[0]);
         const lngVal = zonaSeleccionada.lng || (zonaSeleccionada.position && zonaSeleccionada.position[1]);
 
+        const latNum = Number(latVal);
+        const lngNum = Number(lngVal);
+
         const cuerpo = {
             nombre: zonaSeleccionada.nombre,
-            direccion: zonaSeleccionada.direccion,
-            capacidad: Number(zonaSeleccionada.capacidad),
-            rango: Number(zonaSeleccionada.rango),
-            lat: Number(latVal),
-            lng: Number(lngVal),
+            direccion: zonaSeleccionada.direccion || "",
+            capacidad: Number(zonaSeleccionada.capacidad || 0),
+            rango: Number(zonaSeleccionada.rango || 0),
+            lat: isNaN(latNum) ? 0 : latNum,
+            lng: isNaN(lngNum) ? 0 : lngNum,
+            velocidad: Number(zonaSeleccionada.velocidad || 0),
         };
 
-        if (zonaSeleccionada.foto && zonaSeleccionada.foto.trim() !== "") {
+        if (zonaSeleccionada.estado) {
+            cuerpo.estado = zonaSeleccionada.estado;
+        }
+
+        if (zonaSeleccionada.foto && typeof zonaSeleccionada.foto === 'string' && zonaSeleccionada.foto.trim() !== "") {
             cuerpo.foto = zonaSeleccionada.foto;
         }
 
+        console.log('Enviando datos de zona:', cuerpo);
+
         try {
             if (zonaSeleccionada.id) {
-                await zonasApi.actualizarZona(zonaSeleccionada.id, cuerpo);
+                const res = await zonasApi.actualizarZona(zonaSeleccionada.id, cuerpo);
+                console.log('Respuesta actualizar:', res);
             } else {
-                await zonasApi.crearZona(cuerpo);
+                const res = await zonasApi.crearZona(cuerpo);
+                console.log('Respuesta crear:', res);
             }
             await cargarZonas();
             setZonaSeleccionada(null);
@@ -89,17 +101,21 @@ export const useZonas = () => {
             const latVal = zonaSeleccionada.lat || (zonaSeleccionada.position && zonaSeleccionada.position[0]);
             const lngVal = zonaSeleccionada.lng || (zonaSeleccionada.position && zonaSeleccionada.position[1]);
 
+            const latNum = Number(latVal);
+            const lngNum = Number(lngVal);
+
             const cuerpo = {
                 nombre: zonaSeleccionada.nombre,
-                direccion: zonaSeleccionada.direccion,
-                capacidad: Number(zonaSeleccionada.capacidad),
-                rango: Number(zonaSeleccionada.rango),
-                lat: Number(latVal),
-                lng: Number(lngVal),
+                direccion: zonaSeleccionada.direccion || "",
+                capacidad: Number(zonaSeleccionada.capacidad || 0),
+                rango: Number(zonaSeleccionada.rango || 0),
+                lat: isNaN(latNum) ? 0 : latNum,
+                lng: isNaN(lngNum) ? 0 : lngNum,
+                velocidad: Number(zonaSeleccionada.velocidad || 0),
                 estado: nuevoEstado,
             };
 
-            if (zonaSeleccionada.foto && zonaSeleccionada.foto.trim() !== "") {
+            if (zonaSeleccionada.foto && typeof zonaSeleccionada.foto === 'string' && zonaSeleccionada.foto.trim() !== "") {
                 cuerpo.foto = zonaSeleccionada.foto;
             }
 

@@ -43,6 +43,7 @@ const EventosMapa = ({ setZonaSeleccionada, setHoverPos }) => {
         lng: e.latlng.lng,
         position: [e.latlng.lat, e.latlng.lng],
         foto: "",
+        velocidad: 0,
       });
       setHoverPos(null);
     },
