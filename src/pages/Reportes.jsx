@@ -1,20 +1,76 @@
-import React, { useState } from "react";
-import { Box, Paper, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Paper, Typography, CircularProgress, Alert } from "@mui/material";
 import FiltrosReportes from "../components/reportes/FiltrosReportes";
 import TablaReportes from "../components/reportes/TablaReportes";
 import Layout from "../components/common/Layout";
+import { obtenerReportes } from "../api/reportesApi";
+import { obtenerZonas } from "../api/zonasApi";
 
 export default function Reportes() {
-  const [mes, setMes] = useState("02-2026");
+  const [mes, setMes] = useState("todos");
   const [zona, setZona] = useState("todas");
+  const [reportes, setReportes] = useState([]);
+  const [zonas, setZonas] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
 
-  const reportes = [
-    { fecha: "08/02/26", hora: "17:32", id: "R-454", zona: "Plaza 14 de Sep.", titulo: "Saturación de señal" },
-    { fecha: "06/02/26", hora: "13:45", id: "R-453", zona: "Plaza 14 de Sep.", titulo: "No hay señal" },
-    { fecha: "05/02/26", hora: "12:02", id: "R-452", zona: "Parque Pulpo", titulo: "Permanece en conexión" },
-    { fecha: "05/02/26", hora: "19:10", id: "R-451", zona: "Plazuela del Est.", titulo: "Solo me deja acceder" },
-    { fecha: "05/02/26", hora: "15:54", id: "R-450", zona: "Parque Lincoln", titulo: "No hay señal" },
-  ];
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        setCargando(true);
+        const [listaReportes, listaZonas] = await Promise.all([
+          obtenerReportes(),
+          obtenerZonas()
+        ]);
+
+        setZonas(listaZonas);
+
+        // Crear un mapa de IDs de zona a nombres
+        const mapaZonas = {};
+        listaZonas.forEach(z => {
+          mapaZonas[z.id] = z.nombre;
+        });
+
+        // Formatear los reportes para la tabla
+        const reportesFormateados = listaReportes.map(rep => {
+          const fechaObj = new Date(rep.fecha);
+          return {
+            ...rep,
+            fechaObj,
+            fecha: fechaObj.toLocaleDateString('es-ES'),
+            zona: mapaZonas[rep.zona_id] || rep.zona_id,
+            idDisplay: `R-${String(rep.id).padStart(3, '0')}`
+          };
+        });
+
+        setReportes(reportesFormateados);
+      } catch (err) {
+        console.error("Error al cargar reportes:", err);
+        setError("No se pudieron cargar los reportes. Por favor, intenta de nuevo más tarde.");
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarDatos();
+  }, []);
+
+  // Filtrar reportes
+  const reportesFiltrados = reportes.filter(rep => {
+    // Filtro por zona
+    const porZona = zona === "todas" || rep.zona_id === zona;
+
+    // Filtro por mes (formato MM-YYYY)
+    let porMes = true;
+    if (mes !== "todos") {
+      const [m, y] = mes.split("-").map(Number);
+      const mesReporte = rep.fechaObj.getMonth() + 1; // getMonth() es 0-indexed
+      const anioReporte = rep.fechaObj.getFullYear();
+      porMes = mesReporte === m && anioReporte === y;
+    }
+
+    return porZona && porMes;
+  });
 
   return (
     <Layout>
@@ -41,8 +97,23 @@ export default function Reportes() {
           Últimos reportes
         </Typography>
 
-        <FiltrosReportes mes={mes} setMes={setMes} zona={zona} setZona={setZona} />
-        <TablaReportes reportes={reportes} />
+        <FiltrosReportes
+          mes={mes}
+          setMes={setMes}
+          zona={zona}
+          setZona={setZona}
+          zonas={zonas}
+        />
+
+        {cargando ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
+        ) : (
+          <TablaReportes reportes={reportesFiltrados} />
+        )}
       </Paper>
     </Layout>
   );

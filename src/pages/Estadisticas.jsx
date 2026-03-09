@@ -1,111 +1,117 @@
-import React, { useState } from "react";
-import { Box, Paper, Typography, LinearProgress, Grid } from "@mui/material";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import React, { useEffect, useState } from "react";
+import {
+  Box, Typography, CircularProgress, Alert,
+} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 import Layout from "../components/common/Layout";
-
-const stats = {
-  reportesMes: 48,
-  maxPermisible: 100,
-  calidadServicio: "Moderado",
-  rendimientoMes: 41.52,
-  rendimientoTexto: "MALO",
-  tabla: [
-    { dia: "01/02/26", reportes: 5 },
-    { dia: "02/02/26", reportes: 8 },
-    { dia: "03/02/26", reportes: 6 },
-    { dia: "04/02/26", reportes: 10 },
-    { dia: "05/02/26", reportes: 4 },
-    { dia: "06/02/26", reportes: 3 },
-    { dia: "07/02/26", reportes: 12 },
-  ],
-};
-
-const colorCalidad = (calidad) => {
-  switch (calidad.toLowerCase()) {
-    case "bueno":
-      return "green";
-    case "moderado":
-      return "orange";
-    case "malo":
-      return "red";
-    case "pesimo":
-      return "#b71c1c";
-    default:
-      return "gray";
-  }
-};
+import TarjetaKPI from "../components/estadisticas/TarjetaKPI";
+import GraficoTendencia from "../components/estadisticas/GraficoTendencia";
+import GraficoReportesPorZona from "../components/estadisticas/GraficoReportesPorZona";
+import GraficoTipo from "../components/estadisticas/GraficoTipo";
+import GraficoGravedadZona from "../components/estadisticas/GraficoGravedadZona";
+import GraficoActividad from "../components/estadisticas/GraficoActividad";
+import GraficoSeveridadZona from "../components/estadisticas/GraficoSeveridadZona";
+import { obtenerDatosEstadisticas } from "../api/estadisticasApi";
 
 export default function Estadisticas() {
-  const [data, setData] = useState(stats);
+  const [datos, setDatos] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    obtenerDatosEstadisticas()
+      .then(setDatos)
+      .catch((err) => setError(err.message))
+      .finally(() => setCargando(false));
+  }, []);
+
+  if (cargando) {
+    return (
+      <Layout>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}>
+          <CircularProgress sx={{ color: "#b71c1c" }} size={56} />
+        </Box>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <Alert severity="error" sx={{ m: 4 }}>{error}</Alert>
+      </Layout>
+    );
+  }
+
+  const {
+    kpis,
+    reportesPorZona,
+    tendenciaDiaria,
+    distribucionTipo,
+    gravedadPorZona,
+    actividadPorHora,
+    severidadPorZona,
+  } = datos;
 
   return (
     <Layout>
-      {/* contenedor interior con blanco para contrastar */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        {/* CONTENEDORES SUPERIORES */}
+
+        <Typography variant="h5" sx={{ fontWeight: 800, color: "#b71c1c" }}>
+          Estadísticas de Zonas Wi-Fi
+        </Typography>
+
+        {/* KPIs — 4 columnas */}
         <Grid container spacing={2}>
-          {/* Reportes del mes */}
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold", marginBottom: 1 }}>
-                Reportes del Mes
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                {data.reportesMes}
-              </Typography>
-              <LinearProgress variant="determinate" value={(data.reportesMes / data.maxPermisible) * 100} sx={{ height: 10, borderRadius: 5, marginBottom: 1 }} />
-              <Typography variant="caption" color="text.secondary">
-                Máximo permisible {data.maxPermisible}
-              </Typography>
-            </Paper>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <TarjetaKPI titulo="Total Reportes" valor={kpis.totalReportes} subtitulo="En total acumulado" icono={<AssessmentIcon />} color="#b71c1c" />
           </Grid>
-
-          {/* Calidad del Servicio */}
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                Calidad del Servicio
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: "bold", color: colorCalidad(data.calidadServicio) }}>
-                {data.calidadServicio}
-              </Typography>
-            </Paper>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <TarjetaKPI titulo="Zona Más Reportada" valor={kpis.zonaMasReportada} subtitulo="Mayor número de incidentes" icono={<LocationOnIcon />} color="#d32f2f" />
           </Grid>
-
-          {/* Rendimiento vs mes anterior */}
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3} sx={{ padding: 2, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold", marginBottom: 1 }}>
-                Mes actual
-              </Typography>
-              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                Rendimiento vs mes anterior:
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: "bold", color: data.rendimientoTexto === "MALO" ? "red" : "green" }}>
-                {data.rendimientoMes > 0 ? `+ ${data.rendimientoMes}%` : `${data.rendimientoMes}%`} {data.rendimientoTexto}
-              </Typography>
-            </Paper>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <TarjetaKPI titulo="Gravedad Promedio" valor={`${kpis.gravedadPromedio} / 5`} subtitulo="Promedio de todos los reportes" icono={<WarningAmberIcon />} color="#e65100" />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <TarjetaKPI titulo="Zonas Sin Incidentes" valor={kpis.zonasSinIncidentes} subtitulo={`de ${kpis.totalZonas} zonas totales`} icono={<CheckCircleOutlineIcon />} color="#388e3c" />
           </Grid>
         </Grid>
 
-        {/* GRÁFICO DE LÍNEAS */}
-        <Paper
-          elevation={3}
-          sx={{ padding: 2, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 10px rgba(0,0,0,0.1)", height: 400 }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-            Reportes diarios
-          </Typography>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data.tabla} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis dataKey="dia" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="reportes" stroke="#b71c1c" strokeWidth={3} dot={{ r: 5 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </Paper>
+        {/* Fila 1 */}
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 7 }}>
+            <GraficoTendencia datos={tendenciaDiaria} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <GraficoReportesPorZona datos={reportesPorZona} />
+          </Grid>
+        </Grid>
+
+        {/* Fila 2 */}
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <GraficoTipo datos={distribucionTipo} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 7 }}>
+            <GraficoGravedadZona datos={gravedadPorZona} />
+          </Grid>
+        </Grid>
+
+        {/* Fila 3 */}
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <GraficoActividad datos={actividadPorHora} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <GraficoSeveridadZona datos={severidadPorZona} />
+          </Grid>
+        </Grid>
+
       </Box>
     </Layout>
   );
