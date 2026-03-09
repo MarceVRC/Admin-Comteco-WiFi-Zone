@@ -57,7 +57,7 @@ export const crearZona = async (datosZona) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosZona),
     });
-    if (!respuesta.ok) throw new Error(`Error al crear zona: ${respuesta.status}`);
+    if (!respuesta.ok) throw new Error(`Al crear zona: ${respuesta.status}`);
     return respuesta.json();
 };
 
