@@ -13,7 +13,6 @@ dist-ssr
 *.local
 
 .env
-src/config/env.js
 
 # Editor directories and files
 .vscode/*
