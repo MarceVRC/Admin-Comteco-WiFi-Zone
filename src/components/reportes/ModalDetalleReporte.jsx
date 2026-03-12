@@ -47,7 +47,7 @@ export default function ModalDetalleReporte({ open, onClose, reporte }) {
             maxWidth="sm"
             PaperProps={{
                 sx: {
-                    borderRadius: 0,
+                    borderRadius: 12,
                     overflow: 'hidden',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.15)'
                 }
@@ -82,7 +82,7 @@ export default function ModalDetalleReporte({ open, onClose, reporte }) {
                         label={getTipoLabel(reporte.tipo)}
                         color="error"
                         variant="outlined"
-                        sx={{ fontWeight: 'bold', borderRadius: 0 }}
+                        sx={{ fontWeight: 'bold', borderRadius: 12 }}
                     />
                     <Chip
                         label={`Gravedad: ${reporte.gravedad}`}
@@ -90,7 +90,7 @@ export default function ModalDetalleReporte({ open, onClose, reporte }) {
                             backgroundColor: severityColor,
                             color: 'white',
                             fontWeight: 'bold',
-                            borderRadius: 0
+                            borderRadius: 12
                         }}
                     />
                 </Box>
@@ -132,7 +132,7 @@ export default function ModalDetalleReporte({ open, onClose, reporte }) {
                     </Box>
                 </Box>
 
-                <Box sx={{ mt: 4, p: 2, bgcolor: '#f8f9fa', borderRadius: 0, borderLeft: `4px solid ${severityColor}` }}>
+                <Box sx={{ mt: 4, p: 2, bgcolor: '#f8f9fa', borderRadius: 12, borderLeft: `4px solid ${severityColor}` }}>
                     <Typography variant="caption" color="text.secondary">DESCRIPCIÓN</Typography>
                     <Typography variant="body1" sx={{ mt: 1, color: '#444', lineHeight: 1.6 }}>
                         "{reporte.descripcion}"
@@ -146,7 +146,7 @@ export default function ModalDetalleReporte({ open, onClose, reporte }) {
                     variant="contained"
                     sx={{
                         px: 4,
-                        borderRadius: 0,
+                        borderRadius: 12,
                         bgcolor: '#333',
                         '&:hover': { bgcolor: '#000' }
                     }}

@@ -1,28 +1,22 @@
-/* estilos compartidos para la página de zonas */
-
 .zona-container {
   display: flex;
   flex-direction: column;
-  gap: 24px; /* equivalente a theme.spacing(3) */
-}
-
-.zona-error {
-  text-align: center;
-  margin-bottom: 8px;
-  color: #f44336;
-}
-
-.zona-loading {
-  text-align: center;
-  margin-bottom: 8px;
-  color: rgba(0, 0, 0, 0.54);
+  gap: 24px;
 }
 
 .zona-map-paper {
   width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
   border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.mapa-container {
+  width: 100%;
+  height: 50vh;
+  min-height: 400px;
 }
 
 .zona-form-paper {
@@ -30,37 +24,9 @@
   border-radius: 12px;
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: 0 auto 0 auto;
-}
-
-.zona-input .MuiOutlinedInput-root fieldset {
-  border-color: #CC0000;
-  border-width: 1.5px;
-}
-
-.zona-input .MuiOutlinedInput-root:hover fieldset {
-  border-color: #990000;
-}
-
-.zona-input .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: #CC0000;
-}
-
-.zona-input .MuiInputLabel-root.Mui-focused {
-  color: #CC0000;
-}
-
-.zona-btns {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.mapa-container {
   width: 100%;
-  height: 400px;
-  min-height: 400px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .zona-header {
@@ -73,7 +39,6 @@
   padding-left: 15px;
 }
 
-/* estilo para marcador rojo pequeño */
 .red-marker div {
   background-color: red;
   width: 16px;
@@ -82,5 +47,16 @@
   border: 2px solid white;
 }
 
-/* filter para iconos en mantenimiento */
-.grayscale-icon img, .grayscale-icon { filter: grayscale(100%) opacity(0.5); }
+.grayscale-icon img, .grayscale-icon { 
+  filter: grayscale(100%) opacity(0.5); 
+}
+
+@media (max-width: 600px) {
+  .mapa-container {
+    height: 40vh;
+    min-height: 300px;
+  }
+  .zona-form-paper {
+    padding: 12px;
+  }
+}

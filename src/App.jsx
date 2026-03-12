@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Header from "./components/common/Header";
 import Estadisticas from "./pages/Estadisticas";
 import Zonas from "./pages/Zonas";
 import Reportes from "./pages/Reportes";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -21,34 +22,31 @@ function App() {
 
         <Header />
 
-        <Box
+        <Container
+          maxWidth={false}
           sx={{
             flexGrow: 1,
             width: "100%",
+            maxWidth: "1600px !important", // Limitar ancho en pantallas ultra-wide
             display: "flex",
             flexDirection: "column",
-            alignItems: "stretch",
-            maxWidth: 1200,
-            mx: "auto",
-            px: 2,
-            mt: 10 // Espacio para el header fixed
+            pt: { xs: 10, md: 12 }, // Padding superior para el header fijo
+            pb: 4,
+            px: { xs: 2, md: 3 }
           }}
         >
           <Routes>
             <Route path="/" element={<Navigate to="/estadisticas" replace />} />
-            
-            {/* Rutas Públicas */}
             <Route path="/login" element={<Login />} />
 
-            {/* Rutas Protegidas */}
             <Route path="/estadisticas" element={<ProtectedRoute><Estadisticas /></ProtectedRoute>} />
             <Route path="/zonas" element={<ProtectedRoute><Zonas /></ProtectedRoute>} />
             <Route path="/reportes" element={<ProtectedRoute><Reportes /></ProtectedRoute>} />
+            <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
             
-            {/* Catch all */}
             <Route path="*" element={<Navigate to="/estadisticas" replace />} />
           </Routes>
-        </Box>
+        </Container>
 
       </Box>
     </Router>

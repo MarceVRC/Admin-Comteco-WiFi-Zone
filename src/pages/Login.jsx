@@ -26,44 +26,39 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setLoading(true);
+        
+        if (!email || !password) {
+            setError("Ingrese sus credenciales.");
+            return;
+        }
 
+        setLoading(true);
         try {
             const data = await login(email, password);
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                // Redirigir a estadísticas
                 navigate("/estadisticas");
             } else {
-                setError("No se recibió un token válido.");
+                setError("Error de autenticación.");
             }
         } catch (err) {
-            setError(err.message || "Error al iniciar sesión");
+            setError(err.message || "Credenciales incorrectas.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Container component="main" maxWidth="xs" sx={{ mt: 15, mb: 10 }}>
-            <Paper 
-                elevation={6} 
-                sx={{ 
-                    p: 4, 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    alignItems: "center",
-                    borderRadius: 0
-                }}
-            >
+        <Container maxWidth="xs" sx={{ mt: 15, mb: 10 }}>
+            <Paper elevation={6} sx={{ p: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Box
                     component="img"
                     src={comLogoRed}
-                    alt="Logo Comteco"
+                    alt="Logo"
                     sx={{ height: 80, mb: 2 }}
                 />
                 <Typography component="h1" variant="h5" sx={{ fontWeight: "bold", color: "#CC0000" }}>
-                    COMTECO ZONAS WI-FI
+                    COMTECO ZONAS WiFi
                 </Typography>
                 <Typography variant="subtitle1" sx={{ mb: 3, color: "text.secondary" }}>
                     Administración
@@ -76,44 +71,27 @@ const Login = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
                         label="Correo Electrónico"
-                        name="email"
-                        autoComplete="email"
                         autoFocus
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Email sx={{ color: "#CC0000" }} />
-                                </InputAdornment>
-                            ),
+                            startAdornment: <InputAdornment position="start"><Email sx={{ color: "#CC0000" }} /></InputAdornment>
                         }}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Contraseña"
                         type={showPassword ? "text" : "password"}
-                        id="password"
-                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Lock sx={{ color: "#CC0000" }} />
-                                </InputAdornment>
-                            ),
+                            startAdornment: <InputAdornment position="start"><Lock sx={{ color: "#CC0000" }} /></InputAdornment>,
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        edge="end"
-                                    >
+                                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
@@ -126,17 +104,9 @@ const Login = () => {
                         fullWidth
                         variant="contained"
                         disabled={loading}
-                        sx={{ 
-                            mt: 3, 
-                            mb: 2, 
-                            bgcolor: "#CC0000", 
-                            "&:hover": { bgcolor: "#990000" },
-                            py: 1.5,
-                            fontWeight: "bold",
-                            borderRadius: 0
-                        }}
+                        sx={{ mt: 3, mb: 2, py: 1.5, fontWeight: "bold" }}
                     >
-                        {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+                        {loading ? "Cargando..." : "Iniciar Sesión"}
                     </Button>
                 </Box>
             </Paper>

@@ -4,7 +4,7 @@ import {
     PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#b71c1c", "#d32f2f", "#ef5350", "#e57373", "#ffcdd2"];
+const COLORS = ["#b71c1c", "#d32f2f", "#ef5350", "#ff8a80", "#ffcdd2"];
 
 const RADIAN = Math.PI / 180;
 const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
@@ -13,7 +13,7 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) =>
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     return (
-        <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={13} fontWeight={700}>
+        <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={14} fontWeight={800}>
             {`${(percent * 100).toFixed(0)}%`}
         </text>
     );
@@ -21,29 +21,38 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) =>
 
 export default function GraficoTipo({ datos }) {
     return (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 0, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#333" }}>
-                Distribución por Tipo de Problema
-            </Typography>
-            <Box sx={{ height: 280 }}>
+        <Paper elevation={0} sx={{ p: 4, backgroundColor: "white", borderRadius: 4, border: "1px solid rgba(0,0,0,0.06)", height: "100%" }}>
+            <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: "#1a1a1a" }}>
+                    Tipología de Incidentes
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                    Desglose por categoría técnica de reporte
+                </Typography>
+            </Box>
+
+            <Box sx={{ height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie
                             data={datos}
                             cx="50%"
                             cy="45%"
-                            innerRadius={60}
-                            outerRadius={100}
+                            innerRadius={80}
+                            outerRadius={120}
                             dataKey="value"
                             labelLine={false}
                             label={renderLabel}
+                            stroke="none"
                         >
                             {datos.map((_, i) => (
                                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
                             ))}
                         </Pie>
-                        <Tooltip formatter={(v, n) => [`${v} reportes`, n]} />
-                        <Legend iconType="circle" iconSize={10} />
+                        <Tooltip 
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}
+                        />
+                        <Legend verticalAlign="bottom" iconType="circle" iconSize={10} wrapperStyle={{ paddingTop: '20px' }} />
                     </PieChart>
                 </ResponsiveContainer>
             </Box>

@@ -5,26 +5,47 @@ import {
 } from "recharts";
 
 const getColor = (total) => {
-    if (total === 0) return "#e0e0e0";
-    if (total >= 3) return "#b71c1c";
-    return "#ef9a9a";
+    if (total === 0) return "#f5f5f5";
+    if (total >= 10) return "#CC0000";
+    if (total >= 5) return "#ef5350";
+    return "#ffcdd2";
 };
 
 export default function GraficoActividad({ datos }) {
-    // Only show hours with non-zero values + a small buffer around them, or all 24
     return (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 0, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#333" }}>
-                Actividad por Hora del Día
-            </Typography>
-            <Box sx={{ height: 280 }}>
+        <Paper elevation={0} sx={{ p: 4, backgroundColor: "white", borderRadius: 4, border: "1px solid rgba(0,0,0,0.06)", height: "100%" }}>
+            <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: "#1a1a1a" }}>
+                    Carga Horaria
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                    Distribución de reportes según la hora del día
+                </Typography>
+            </Box>
+
+            <Box sx={{ height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={datos} margin={{ top: 10, right: 20, bottom: 50, left: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="hora" tick={{ fontSize: 10, angle: -45, textAnchor: "end" }} interval={1} height={70} />
-                        <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-                        <Tooltip formatter={(v) => [`${v} reportes`, "Total"]} />
-                        <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+                    <BarChart data={datos} margin={{ top: 10, right: 30, bottom: 20, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                        <XAxis 
+                            dataKey="hora" 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 10, fill: "#888", fontWeight: 700 }} 
+                            interval={5} // Mostrar cada 6 horas (00, 06, 12, 18) para seguridad total
+                        />
+                        <YAxis 
+                            allowDecimals={false} 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 12, fill: "#999" }}
+                        />
+                        <Tooltip 
+                            cursor={{ fill: 'rgba(0,0,0,0.02)' }}
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}
+                            formatter={(v) => [`${v} reportes`, "Total"]} 
+                        />
+                        <Bar dataKey="total" radius={[8, 8, 0, 0]} barSize={25}>
                             {datos.map((entry, i) => (
                                 <Cell key={i} fill={getColor(entry.total)} />
                             ))}

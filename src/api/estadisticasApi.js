@@ -39,10 +39,19 @@ export const obtenerDatosEstadisticas = async () => {
     });
     const tendenciaDiaria = Object.entries(conteoDia)
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([dia, total]) => ({
-            dia: new Date(dia + "T00:00:00").toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit" }),
-            total,
-        }));
+        .map(([dia, total]) => {
+            let label = dia;
+            if (dia && dia !== "Sin fecha") {
+                // Intentar formatear. Si dia ya viene como "DD/MM", no hacer nada.
+                if (dia.includes("-")) { // Formato YYYY-MM-DD
+                    const parts = dia.split("-");
+                    if (parts.length === 3) {
+                        label = `${parts[2]}/${parts[1]}`; // DD/MM simplificado
+                    }
+                }
+            }
+            return { dia: label, total };
+        });
 
     // ── 3. Distribución por tipo ──────────────
     const TIPO_LABEL = {

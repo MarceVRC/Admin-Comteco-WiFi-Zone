@@ -23,7 +23,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 0,
+          borderRadius: 8,
           textTransform: 'none',
           fontWeight: 600,
         },
@@ -32,7 +32,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 0,
+          borderRadius: 12,
         },
       },
     },

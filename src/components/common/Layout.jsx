@@ -1,19 +1,18 @@
 import React from "react";
-import { Box, Toolbar } from "@mui/material";
+import { Box } from "@mui/material";
 
 export default function Layout({ children }) {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
         width: "100%",
-        backgroundColor: "#f5f5f5",
-        p: { xs: 2, sm: 3, md: 4 },
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      {/* toolbar spacer ensures content sits below fixed header */}
-      <Toolbar />
-      {children}
+      <Box component="main" sx={{ width: "100%" }}>
+        {children}
+      </Box>
     </Box>
   );
 }
