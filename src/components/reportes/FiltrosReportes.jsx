@@ -1,6 +1,6 @@
-import { Box, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
-export default function FiltrosReportes({ mes, setMes, zona, setZona, zonas = [] }) {
+export default function FiltrosReportes({ mes, setMes, zona, setZona, zonas = [], opcionesMeses = [] }) {
   return (
     <Box sx={{
       display: "flex",
@@ -8,13 +8,15 @@ export default function FiltrosReportes({ mes, setMes, zona, setZona, zonas = []
       gap: 2,
       marginBottom: 3
     }}>
-      <FormControl size="small">
+      <FormControl size="small" sx={{ minWidth: 150 }}>
         <InputLabel>Mes</InputLabel>
         <Select value={mes} label="Mes" onChange={(e) => setMes(e.target.value)}>
           <MenuItem value="todos">Todos los meses</MenuItem>
-          <MenuItem value="03-2026">03/2026</MenuItem>
-          <MenuItem value="02-2026">02/2026</MenuItem>
-          <MenuItem value="01-2026">01/2026</MenuItem>
+          {opcionesMeses.map((opt) => (
+            <MenuItem key={opt} value={opt}>
+              {opt.replace('-', '/')}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 

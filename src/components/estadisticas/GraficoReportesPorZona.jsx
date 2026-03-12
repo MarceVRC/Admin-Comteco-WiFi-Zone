@@ -9,7 +9,7 @@ const COLORS = ["#b71c1c", "#d32f2f", "#e53935", "#ef5350", "#e57373", "#ffcdd2"
 export default function GraficoReportesPorZona({ datos }) {
     const height = Math.max(220, datos.length * 44);
     return (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 0, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#333" }}>
                 Reportes por Zona
             </Typography>

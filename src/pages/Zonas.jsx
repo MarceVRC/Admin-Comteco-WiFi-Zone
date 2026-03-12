@@ -57,7 +57,7 @@ export default function Zonas() {
           </Typography>
         )}
 
-        <Paper className="zona-map-paper" elevation={4} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+        <Paper className="zona-map-paper" elevation={4} sx={{ borderRadius: 0, overflow: 'hidden' }}>
           <MapaZonas
             className="mapa-container"
             zonas={zonas}
@@ -68,7 +68,7 @@ export default function Zonas() {
           />
         </Paper>
 
-        <Paper className="zona-form-paper" elevation={4} sx={{ p: 3, borderRadius: 4 }}>
+        <Paper className="zona-form-paper" elevation={4} sx={{ p: 3, borderRadius: 0 }}>
           <FormularioZona
             zona={zonaSeleccionada}
             onChange={manejarCambioInput}

@@ -6,7 +6,7 @@ import {
 
 export default function GraficoTendencia({ datos }) {
     return (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 0, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#333" }}>
                 Tendencia de Reportes por Día
             </Typography>
@@ -15,8 +15,8 @@ export default function GraficoTendencia({ datos }) {
                     <AreaChart data={datos} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
                         <defs>
                             <linearGradient id="colorReportes" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#b71c1c" stopOpacity={0.25} />
-                                <stop offset="95%" stopColor="#b71c1c" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#CC0000" stopOpacity={0.25} />
+                                <stop offset="95%" stopColor="#CC0000" stopOpacity={0} />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -26,10 +26,10 @@ export default function GraficoTendencia({ datos }) {
                         <Area
                             type="monotone"
                             dataKey="total"
-                            stroke="#b71c1c"
+                            stroke="#CC0000"
                             strokeWidth={3}
                             fill="url(#colorReportes)"
-                            dot={{ r: 5, fill: "#b71c1c" }}
+                            dot={{ r: 5, fill: "#CC0000" }}
                             activeDot={{ r: 7 }}
                         />
                     </AreaChart>

@@ -1,12 +1,12 @@
 import React from "react";
 import { Paper, Typography, Box } from "@mui/material";
 
-export default function TarjetaKPI({ titulo, valor, subtitulo, icono, color = "#b71c1c" }) {
+export default function TarjetaKPI({ titulo, valor, subtitulo, icono, color = "#CC0000" }) {
     return (
         <Paper
             elevation={3}
             sx={{
-                borderRadius: 3,
+                borderRadius: 0,
                 p: 2.5,
                 display: "flex",
                 alignItems: "center",

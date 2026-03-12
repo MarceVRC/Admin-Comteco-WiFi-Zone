@@ -50,7 +50,7 @@ const SeveridadChip = ({ nivel }) => {
         gap: 0.6,
         width: 110,
         py: 0.4,
-        borderRadius: 2,
+        borderRadius: 0,
         backgroundColor: bg,
         color,
         fontWeight: 700,
@@ -100,13 +100,13 @@ export default function TablaReportes({ reportes }) {
         component={Paper}
         elevation={2}
         sx={{
-          borderRadius: 3,
+          borderRadius: 0,
           width: "100%",
         }}
       >
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#b71c1c" }}>
+            <TableRow sx={{ backgroundColor: "#CC0000" }}>
               {["Fecha", "Hora", "ID", "Zona Wi-Fi", "Título", "Gravedad", "Detalles"].map((col, i) => (
                 <TableCell
                   key={i}
@@ -146,7 +146,7 @@ export default function TablaReportes({ reportes }) {
                     sx={{
                       backgroundColor: "#d32f2f",
                       textTransform: "none",
-                      "&:hover": { backgroundColor: "#b71c1c" },
+                      "&:hover": { backgroundColor: "#CC0000" },
                     }}
                   >
                     Ver

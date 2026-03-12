@@ -1,0 +1,147 @@
+import React, { useState } from "react";
+import { 
+    Box, 
+    Button, 
+    TextField, 
+    Typography, 
+    Paper, 
+    Container, 
+    Alert,
+    InputAdornment,
+    IconButton
+} from "@mui/material";
+import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { login } from "../api/authApi";
+import comLogoRed from "../assets/c-red.png";
+
+const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+
+        try {
+            const data = await login(email, password);
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                // Redirigir a estadísticas
+                navigate("/estadisticas");
+            } else {
+                setError("No se recibió un token válido.");
+            }
+        } catch (err) {
+            setError(err.message || "Error al iniciar sesión");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Container component="main" maxWidth="xs" sx={{ mt: 15, mb: 10 }}>
+            <Paper 
+                elevation={6} 
+                sx={{ 
+                    p: 4, 
+                    display: "flex", 
+                    flexDirection: "column", 
+                    alignItems: "center",
+                    borderRadius: 0
+                }}
+            >
+                <Box
+                    component="img"
+                    src={comLogoRed}
+                    alt="Logo Comteco"
+                    sx={{ height: 80, mb: 2 }}
+                />
+                <Typography component="h1" variant="h5" sx={{ fontWeight: "bold", color: "#CC0000" }}>
+                    COMTECO ZONAS WI-FI
+                </Typography>
+                <Typography variant="subtitle1" sx={{ mb: 3, color: "text.secondary" }}>
+                    Administración
+                </Typography>
+
+                {error && <Alert severity="error" sx={{ width: "100%", mb: 2 }}>{error}</Alert>}
+
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: "100%" }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Correo Electrónico"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Email sx={{ color: "#CC0000" }} />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Contraseña"
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Lock sx={{ color: "#CC0000" }} />
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={loading}
+                        sx={{ 
+                            mt: 3, 
+                            mb: 2, 
+                            bgcolor: "#CC0000", 
+                            "&:hover": { bgcolor: "#990000" },
+                            py: 1.5,
+                            fontWeight: "bold",
+                            borderRadius: 0
+                        }}
+                    >
+                        {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
+    );
+};
+
+export default Login;

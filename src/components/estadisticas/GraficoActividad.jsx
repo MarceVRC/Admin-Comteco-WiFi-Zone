@@ -13,7 +13,7 @@ const getColor = (total) => {
 export default function GraficoActividad({ datos }) {
     // Only show hours with non-zero values + a small buffer around them, or all 24
     return (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 3, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 0, backgroundColor: "white", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#333" }}>
                 Actividad por Hora del Día
             </Typography>

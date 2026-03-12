@@ -91,7 +91,7 @@ export default function FormularioZona({
                 component="img"
                 src={zona.foto}
                 alt="Vista previa"
-                sx={{ width: 64, height: 64, borderRadius: 1, objectFit: 'cover', border: '1px solid #CC0000' }}
+                sx={{ width: 64, height: 64, borderRadius: 0, objectFit: 'cover', border: '1px solid #CC0000' }}
               />
             )}
             <Button
@@ -139,7 +139,7 @@ export default function FormularioZona({
               bgcolor: '#CC0000',
               '&:hover': { bgcolor: '#990000' },
               fontWeight: 'bold',
-              borderRadius: 2,
+              borderRadius: 0,
               py: 1.5
             }}
           >
@@ -151,7 +151,7 @@ export default function FormularioZona({
               variant="outlined"
               color="error"
               onClick={onDelete}
-              sx={{ borderRadius: 2, fontWeight: 'bold' }}
+              sx={{ borderRadius: 0, fontWeight: 'bold' }}
             >
               Borrar
             </Button>
@@ -162,7 +162,7 @@ export default function FormularioZona({
               variant="contained"
               color={zona.estado === 'MANTENIMIENTO' ? 'success' : 'warning'}
               onClick={onToggleMantenimiento}
-              sx={{ borderRadius: 2, fontWeight: 'bold' }}
+              sx={{ borderRadius: 0, fontWeight: 'bold' }}
             >
               {zona.estado === 'MANTENIMIENTO' ? 'Activar' : 'Mantenimiento'}
             </Button>

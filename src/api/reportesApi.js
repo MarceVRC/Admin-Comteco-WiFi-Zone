@@ -1,4 +1,5 @@
 import { env } from "../config/env";
+import { apiFetch } from "./apiClient";
 
 /**
  * Obtiene todos los reportes desde el backend.
@@ -6,7 +7,7 @@ import { env } from "../config/env";
  */
 export const obtenerReportes = async () => {
     try {
-        const respuesta = await fetch(env.REPORTS_API_URL);
+        const respuesta = await apiFetch(env.REPORTS_API_URL);
         if (!respuesta.ok) throw new Error(`Error al obtener reportes: ${respuesta.status}`);
 
         const datos = await respuesta.json();

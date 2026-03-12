@@ -1,9 +1,8 @@
 import { env } from "../config/env";
+import { apiFetch } from "./apiClient";
 
 /**
  * Verifica si una URL de imagen es válida.
- * @param {string} url - URL de la imagen.
- * @returns {Promise<string|null>} - La URL si es válida, null de lo contrario.
  */
 export const verificarImagen = (url) =>
     new Promise((resolve) => {
@@ -16,8 +15,6 @@ export const verificarImagen = (url) =>
 
 /**
  * Agrega la propiedad position si no existe.
- * @param {Object} zona - Objeto de la zona.
- * @returns {Object} - Zona normalizada.
  */
 export const normalizarZona = (zona) => ({
     ...zona,
@@ -26,10 +23,9 @@ export const normalizarZona = (zona) => ({
 
 /**
  * Obtiene todas las zonas desde el backend.
- * @returns {Array} - Lista de zonas.
  */
 export const obtenerZonas = async () => {
-    const respuesta = await fetch(env.API_BASE_URL);
+    const respuesta = await apiFetch(env.API_BASE_URL);
     if (!respuesta.ok) throw new Error(`Error al obtener zonas: ${respuesta.status}`);
 
     const datos = await respuesta.json();
@@ -48,19 +44,14 @@ export const obtenerZonas = async () => {
 
 /**
  * Crea una nueva zona.
- * @param {Object} datosZona - Datos de la zona a crear.
- * @returns {Object} - Respuesta del servidor.
  */
 export const crearZona = async (datosZona) => {
-    console.log(`POST a ${env.API_BASE_URL} con:`, datosZona);
-    const respuesta = await fetch(env.API_BASE_URL, {
+    const respuesta = await apiFetch(env.API_BASE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosZona),
     });
     if (!respuesta.ok) {
         const errorData = await respuesta.json();
-        console.error('Error del servidor:', errorData);
         throw new Error(errorData.error || `Al crear zona: ${respuesta.status}`);
     }
     return respuesta.json();
@@ -68,20 +59,14 @@ export const crearZona = async (datosZona) => {
 
 /**
  * Actualiza una zona existente.
- * @param {string|number} id - ID de la zona.
- * @param {Object} datosZona - Datos actualizados.
- * @returns {Object} - Respuesta del servidor.
  */
 export const actualizarZona = async (id, datosZona) => {
-    console.log(`PUT a ${env.API_BASE_URL}/${id} con:`, datosZona);
-    const respuesta = await fetch(`${env.API_BASE_URL}/${id}`, {
+    const respuesta = await apiFetch(`${env.API_BASE_URL}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosZona),
     });
     if (!respuesta.ok) {
         const errorData = await respuesta.json();
-        console.error('Error del servidor:', errorData);
         throw new Error(errorData.error || `Error al actualizar zona: ${respuesta.status}`);
     }
     return respuesta.json();
@@ -89,11 +74,9 @@ export const actualizarZona = async (id, datosZona) => {
 
 /**
  * Elimina una zona.
- * @param {string|number} id - ID de la zona.
- * @returns {Object} - Respuesta del servidor.
  */
 export const eliminarZona = async (id) => {
-    const respuesta = await fetch(`${env.API_BASE_URL}/${id}`, {
+    const respuesta = await apiFetch(`${env.API_BASE_URL}/${id}`, {
         method: "DELETE",
     });
     if (!respuesta.ok) throw new Error(`Error al eliminar zona: ${respuesta.status}`);
