@@ -26,13 +26,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import MapIcon from '@mui/icons-material/Map';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { clearAuth, isAuthenticated } from '../../utils/auth';
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const token = localStorage.getItem("token");
+  const isLoggedIn = isAuthenticated();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function Header() {
   const handleLogout = () => {
     handleCloseMenu();
     setMobileOpen(false);
-    localStorage.removeItem("token");
+    clearAuth();
     navigate("/login");
   };
 
@@ -108,7 +109,7 @@ export default function Header() {
     <AppBar position="fixed" elevation={0} sx={{ backgroundColor: "#CC0000", zIndex: theme.zIndex.drawer + 1, borderRadius: 0 }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {isMobile && token && (
+          {isMobile && isLoggedIn && (
             <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 1 }}>
               <MenuIcon />
             </IconButton>
@@ -124,7 +125,7 @@ export default function Header() {
           </Box>
         </Box>
 
-        {!isMobile && token && (
+        {!isMobile && isLoggedIn && (
           <Box sx={{ display: "flex", gap: 1 }}>
             {navItems.map((item) => (
               <Button
@@ -140,7 +141,7 @@ export default function Header() {
           </Box>
         )}
 
-        {token && (
+        {isLoggedIn && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {!isMobile ? (
               <>

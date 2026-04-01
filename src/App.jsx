@@ -6,10 +6,10 @@ import Zonas from "./pages/Zonas";
 import Reportes from "./pages/Reportes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { isAuthenticated } from "./utils/auth";
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
   return children;

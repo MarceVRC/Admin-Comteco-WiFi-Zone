@@ -1,8 +1,10 @@
 /**
  * Cliente API centralizado para manejar peticiones con autenticación.
  */
+import { clearAuth, getAuthToken, redirectToLogin } from "../utils/auth";
+
 export const apiFetch = async (url, options = {}) => {
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     
     const headers = {
         "Content-Type": "application/json",
@@ -20,8 +22,8 @@ export const apiFetch = async (url, options = {}) => {
 
     if (response.status === 401) {
         // Token expirado o inválido
-        localStorage.removeItem("token");
-        window.location.href = "/login";
+        clearAuth();
+        redirectToLogin();
         throw new Error("Sesión expirada. Inicie sesión nuevamente.");
     }
 

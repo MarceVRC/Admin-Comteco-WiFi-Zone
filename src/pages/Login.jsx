@@ -11,8 +11,10 @@ import {
     IconButton
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/authApi";
+import { isAuthenticated, saveAuthToken } from "../utils/auth";
 import comLogoRed from "../assets/c-red.png";
 
 const Login = () => {
@@ -22,6 +24,12 @@ const Login = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate("/estadisticas", { replace: true });
+        }
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,7 +44,7 @@ const Login = () => {
         try {
             const data = await login(email, password);
             if (data.token) {
-                localStorage.setItem("token", data.token);
+                saveAuthToken(data.token);
                 navigate("/estadisticas");
             } else {
                 setError("Error de autenticación.");
