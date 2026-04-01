@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { 
-    Box, 
-    Button, 
-    TextField, 
-    Typography, 
-    Paper, 
-    Container, 
+import {
+    Box,
+    Button,
+    TextField,
+    Typography,
+    Paper,
+    Container,
     Alert,
     InputAdornment,
     IconButton
@@ -26,7 +26,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        
+
         if (!email || !password) {
             setError("Ingrese sus credenciales.");
             return;
@@ -98,7 +98,7 @@ const Login = () => {
                             ),
                         }}
                     />
-                    
+
                     <Button
                         type="submit"
                         fullWidth

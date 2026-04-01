@@ -43,7 +43,7 @@ function App() {
             <Route path="/zonas" element={<ProtectedRoute><Zonas /></ProtectedRoute>} />
             <Route path="/reportes" element={<ProtectedRoute><Reportes /></ProtectedRoute>} />
             <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
-            
+
             <Route path="*" element={<Navigate to="/estadisticas" replace />} />
           </Routes>
         </Container>
