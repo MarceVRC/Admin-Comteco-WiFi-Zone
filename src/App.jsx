@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { Box, Container } from "@mui/material";
 import Header from "./components/common/Header";
 import Estadisticas from "./pages/Estadisticas";
+import CarruselImagenes from "./pages/CarruselImagenes";
 import Zonas from "./pages/Zonas";
 import Reportes from "./pages/Reportes";
 import Login from "./pages/Login";
@@ -40,6 +41,7 @@ function App() {
             <Route path="/login" element={<Login />} />
 
             <Route path="/estadisticas" element={<ProtectedRoute><Estadisticas /></ProtectedRoute>} />
+            <Route path="/carrusel-imagenes" element={<ProtectedRoute><CarruselImagenes /></ProtectedRoute>} />
             <Route path="/zonas" element={<ProtectedRoute><Zonas /></ProtectedRoute>} />
             <Route path="/reportes" element={<ProtectedRoute><Reportes /></ProtectedRoute>} />
             <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />

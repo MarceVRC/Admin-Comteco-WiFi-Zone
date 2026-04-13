@@ -24,6 +24,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import MapIcon from '@mui/icons-material/Map';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { clearAuth, isAuthenticated } from '../../utils/auth';
@@ -62,6 +63,7 @@ export default function Header() {
 
   const navItems = [
     { label: "Estadísticas", path: "/estadisticas", icon: <AssessmentIcon /> },
+    { label: "Carrusel de Imagenes", path: "/carrusel-imagenes", icon: <PhotoLibraryIcon /> },
     { label: "Zonas", path: "/zonas", icon: <MapIcon /> },
     { label: "Reportes", path: "/reportes", icon: <AssignmentIcon /> },
   ];
@@ -76,7 +78,7 @@ export default function Header() {
       <List>
         {navItems.map((item) => (
           <ListItem
-            button
+            button={true}
             key={item.path}
             component={NavLink}
             to={item.path}
@@ -93,11 +95,11 @@ export default function Header() {
       </List>
       <Divider />
       <List>
-        <ListItem button onClick={() => handleNavigate("/register")}>
+        <ListItem button={true} onClick={() => handleNavigate("/register")}> 
           <ListItemIcon><PersonAddIcon /></ListItemIcon>
           <ListItemText primary="Nuevo Usuario" />
         </ListItem>
-        <ListItem button onClick={handleLogout} sx={{ color: "#CC0000" }}>
+        <ListItem button={true} onClick={handleLogout} sx={{ color: "#CC0000" }}>
           <ListItemIcon><LogoutIcon sx={{ color: "#CC0000" }} /></ListItemIcon>
           <ListItemText primary="Salir" />
         </ListItem>
