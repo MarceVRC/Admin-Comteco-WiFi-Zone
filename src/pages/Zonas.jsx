@@ -85,6 +85,7 @@ export default function Zonas() {
             onSave={guardarZona}
             onDelete={eliminarZonaLocal}
             onToggleMantenimiento={alternarMantenimiento}
+            cargando={cargando}
           />
         </Paper>
       </Box>

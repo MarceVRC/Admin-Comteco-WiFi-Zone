@@ -1,6 +1,17 @@
 import { env } from "../config/env";
 import { apiFetch } from "./apiClient";
 
+const resolverUrlImagen = (url) => {
+    if (!url) return null;
+    if (url.startsWith('/uploads')) {
+        // Usar la URL base sin el sufijo /zonas
+        const baseUrl = env.API_BASE_URL.replace('/zonas', '');
+        return `${baseUrl}${url}`;
+    }
+    // Para URLs externas o inválidas, devolver null para no mostrar
+    return null;
+};
+
 /**
  * Verifica si una URL de imagen es válida.
  */
@@ -33,8 +44,9 @@ export const obtenerZonas = async () => {
     if (datos.ok && Array.isArray(datos.zonas)) {
         const zonasVerificadas = await Promise.all(
             datos.zonas.map(async (zona) => {
-                const fotoValida = await verificarImagen(zona.foto);
-                return normalizarZona({ ...zona, foto: fotoValida });
+                const fotoUrl = resolverUrlImagen(zona.foto);
+                const fotoValida = await verificarImagen(fotoUrl);
+                return normalizarZona({ ...zona, foto: fotoValida || fotoUrl });
             })
         );
         return zonasVerificadas;

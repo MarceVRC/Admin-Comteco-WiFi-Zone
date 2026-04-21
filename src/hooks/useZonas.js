@@ -1,6 +1,23 @@
 import { useState, useEffect, useCallback } from "react";
 import * as zonasApi from "../api/zonasApi";
-import * as cloudinaryApi from "../api/cloudinaryService";
+import * as uploadApi from "../api/uploadService";
+import { env } from "../config/env";
+
+const normalizarFotoParaGuardar = (foto) => {
+    if (!foto || typeof foto !== 'string') return foto;
+    if (foto.startsWith(env.API_BASE_URL)) {
+        return foto.replace(env.API_BASE_URL, '');
+    }
+    try {
+        const parsed = new URL(foto);
+        if (parsed.pathname.startsWith('/uploads')) {
+            return parsed.pathname;
+        }
+    } catch (error) {
+        // no es una URL completa, conservar como venga
+    }
+    return foto;
+};
 
 /**
  * Hook personalizado para gestionar la lógica de las zonas de WiFi.
@@ -42,10 +59,10 @@ export const useZonas = () => {
         try {
             let fotoUrl = zonaSeleccionada.foto;
 
-            // Si hay un archivo pendiente de subir
+            // Si hay un archivo pendiente de subir, se envía al backend local
             if (zonaSeleccionada.archivoFoto) {
-                console.log('Subiendo imagen a Cloudinary...');
-                fotoUrl = await cloudinaryApi.subirImagenACloudinary(zonaSeleccionada.archivoFoto);
+                console.log('Subiendo imagen al backend...');
+                fotoUrl = await uploadApi.subirImagenAlBackend(zonaSeleccionada.archivoFoto);
                 console.log('Imagen subida con éxito:', fotoUrl);
             }
 
@@ -70,7 +87,7 @@ export const useZonas = () => {
             }
 
             if (fotoUrl && typeof fotoUrl === 'string' && fotoUrl.trim() !== "") {
-                cuerpo.foto = fotoUrl;
+                cuerpo.foto = normalizarFotoParaGuardar(fotoUrl);
             }
 
             console.log('Enviando datos de zona:', cuerpo);
@@ -132,7 +149,7 @@ export const useZonas = () => {
             };
 
             if (zonaSeleccionada.foto && typeof zonaSeleccionada.foto === 'string' && zonaSeleccionada.foto.trim() !== "") {
-                cuerpo.foto = zonaSeleccionada.foto;
+                cuerpo.foto = normalizarFotoParaGuardar(zonaSeleccionada.foto);
             }
 
             await zonasApi.actualizarZona(zonaSeleccionada.id, cuerpo);

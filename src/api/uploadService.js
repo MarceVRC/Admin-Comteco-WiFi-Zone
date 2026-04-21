@@ -10,7 +10,9 @@ export const subirImagenAlBackend = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const respuesta = await apiFetch(`${env.API_BASE_URL}/upload`, {
+    // El endpoint de upload está en la raíz, no bajo /zonas
+    const baseUrl = env.API_BASE_URL.replace('/zonas', '');
+    const respuesta = await apiFetch(`${baseUrl}/upload`, {
         method: "POST",
         body: formData,
     });

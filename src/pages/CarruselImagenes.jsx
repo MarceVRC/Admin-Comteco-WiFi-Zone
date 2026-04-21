@@ -6,13 +6,25 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Layout from "../components/common/Layout";
-import { subirImagenACloudinary } from "../api/cloudinaryService";
+import { subirImagenAlBackend } from "../api/uploadService";
 import { crearAd, obtenerAds, cambiarOrdenAd, eliminarAd } from "../api/adsApi";
 
 import ResumenTarjetas from "./carrusel/ResumenTarjetas";
 import ListaImagenes from "./carrusel/ListaImagenes";
 import ModalPreview from "./carrusel/ModalPreview";
 import ModalUpload from "./carrusel/ModalUpload";
+import { env } from "../config/env";
+
+const resolverUrlImagen = (url) => {
+  if (!url) return url;
+  if (url.startsWith('/uploads')) {
+    // Usar la URL base sin el sufijo específico (/ads, /zonas, etc.)
+    const baseUrl = env.ADS_API_URL?.replace(/\/ads$/, '') || env.API_BASE_URL?.replace(/\/zonas$/, '') || 'http://localhost:3000';
+    return `${baseUrl}${url}`;
+  }
+  // Para URLs externas o inválidas, devolver null
+  return null;
+};
 
 const crearPlaceholder = (titulo, subtitulo, colorA, colorB) => {
   const svg = `
@@ -112,7 +124,7 @@ export default function CarruselImagenes() {
         tamano: 0,
         dimensiones: "Sin datos",
         estado: "Publicada",
-        url: ad.image_url,
+        url: resolverUrlImagen(ad.image_url),
         origen: "backend",
         redirectUrl: ad.redirect_url || "",
       }));
@@ -190,7 +202,7 @@ export default function CarruselImagenes() {
     setMensaje("");
     try {
       const dimensiones = await obtenerDimensionesArchivo(modalFile);
-      const imageUrl = await subirImagenACloudinary(modalFile);
+      const imageUrl = await subirImagenAlBackend(modalFile);
       await crearAd({
         image_url: imageUrl,
         redirect_url: modalRedirectUrl.trim(),
@@ -201,7 +213,7 @@ export default function CarruselImagenes() {
         tamano: Number((modalFile.size / (1024 * 1024)).toFixed(2)),
         dimensiones,
         estado: "Publicada",
-        url: imageUrl,
+        url: resolverUrlImagen(imageUrl),
         origen: "backend",
         redirectUrl: modalRedirectUrl.trim(),
       };
